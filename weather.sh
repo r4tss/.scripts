@@ -1,6 +1,7 @@
 #!/bin/bash
-
-w=$(curl -s "https://opendata-download-metanalys.smhi.se/api/category/mesan1g/version/2/geotype/point/lon/$1/lat/$2/data.json")
+lon=$(head -n1 weather.data)
+lat=$(tail -n1 weather.data)
+w=$(curl -s "https://opendata-download-metanalys.smhi.se/api/category/mesan1g/version/2/geotype/point/lon/$lon/lat/$lat/data.json")
 t=$(echo $w | jq '.timeSeries' | jq '.[0].parameters' | jq -c '.[] | select (.name=="t") | .values' | awk -F '[][]' '{print $2}')
 i=$(echo $w | jq '.timeSeries' | jq '.[0].parameters' | jq -c '.[] | select (.name=="Wsymb2") | .values' | awk -F '[][]' '{print $2}')
 time=$(date +'%H')
